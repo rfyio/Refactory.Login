@@ -94,9 +94,12 @@ class AccountManagementService {
 	 * @throws \TYPO3\Flow\Exception
 	 */
 	public function generateResetPasswordTokenForParty(AbstractParty $party, \TYPO3\Flow\Mvc\ActionRequest $request = NULL) {
-		$account = $this->getAccountByParty($party);
-		$request->getHttpRequest()->getClientIpAddress();
-		return $this->generateResetPasswordToken($account, $request);
+		$accounts = $party->getAccounts();
+
+		foreach ($accounts as $account) {
+			$request->getHttpRequest()->getClientIpAddress();
+			return $this->generateResetPasswordToken($account, $request);
+		}
 	}
 
 	/**
@@ -121,15 +124,6 @@ class AccountManagementService {
 			$resetPasswordToken->setActive(FALSE);
 			$this->resetPasswordTokenRepository->update($resetPasswordToken);
 		}
-	}
-
-	/**
-	 * Method to find account by given party
-	 * @param $party
-	 * @return \TYPO3\Flow\Security\Account
-	 */
-	public function getAccountByParty($party) {
-		return $this->accountRepository->findOneByParty($party);
 	}
 
 	/**

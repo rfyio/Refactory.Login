@@ -92,7 +92,11 @@ class PasswordController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 			if ($resetPasswordToken instanceof \Refactory\Login\Domain\Model\ResetPasswordToken) {
 				$this->emitSendResetRequest(
 					array('controllerContext' => $this->controllerContext,
-						'resetPasswordToken' => $resetPasswordToken->getToken(), 'recipient' => $person,
+						'resetPasswordToken' => $resetPasswordToken->getToken(),
+						 'recipient' => [
+							 'name' => $person->getName()->getFullName(),
+							 'email' => $person->getPrimaryElectronicAddress(),
+						 ],
 						'properties' => array('recipient' => $person)
 					)
 				);
