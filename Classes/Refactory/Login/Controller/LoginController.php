@@ -35,6 +35,12 @@ class LoginController extends AbstractAuthenticationController {
 		'html'  => 'TYPO3\Fluid\View\TemplateView',
 		'json'  => 'TYPO3\Flow\Mvc\View\JsonView');
 
+    /**
+     * @Flow\Inject
+     * @var  \TYPO3\Flow\I18n\Service
+     */
+    protected $i18nService;
+
 	/**
 	 * @var \TYPO3\Flow\I18n\Translator
 	 * @Flow\Inject
@@ -47,6 +53,12 @@ class LoginController extends AbstractAuthenticationController {
 	 * @param string $username
 	 */
 	public function loginAction($username = '') {
+        # Set locale based on Accept-Language
+        $detector = new \TYPO3\Flow\I18n\Detector();
+        $acceptLanguageHeader = $this->request->getHttpRequest()->getHeaders()->get('Accept-Language');
+        $language = $detector->detectLocaleFromHttpHeader($acceptLanguageHeader);
+        $this->i18nService->getConfiguration()->setCurrentLocale($language);
+
 		if ($this->authenticationManager->isAuthenticated()) {
 			if (isset($this->settings['authenticatedRedirect'])) {
 				$redirect = $this->settings['authenticatedRedirect'];

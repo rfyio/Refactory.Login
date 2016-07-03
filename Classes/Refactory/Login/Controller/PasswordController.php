@@ -53,6 +53,12 @@ class PasswordController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 	protected $userRepository;
 
 	/**
+	 * @var string
+	 * @Flow\Inject(setting="partyRepositoryClassName", package="Refactory.Login")
+	 */
+	protected $partyRepositoryClassName;
+
+	/**
 	 * Display reset a password request form
 	 */
 	public function resetRequestAction() {
@@ -80,7 +86,8 @@ class PasswordController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 		} else {
 			$account = $this->accountRepository->findByAccountIdentifierAndAuthenticationProviderName($identifier, 'DefaultProvider');
 			if ($account !== NULL) {
-				$person = $account->getParty();
+				$partyRepository = $this->objectManager->get($this->partyRepositoryClassName);
+				$person = $partyRepository->findOneHavingAccount($account);
 				$resetPasswordToken = $this->accountManagementService->generateResetPasswordTokenForParty($person, $this->request);
 			} else {
 				$person = $this->userRepository->findByPrimaryElectronicAddress($identifier)->getFirst();

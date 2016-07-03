@@ -22,12 +22,26 @@ class SecurityHelper {
 	protected $securityContext;
 
 	/**
+	 * @var string
+	 * @Flow\Inject(setting="partyRepositoryClassName", package="Refactory.Login")
+	 */
+	protected $partyRepositoryClassName;
+
+	/**
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Object\ObjectManagerInterface
+	 */
+	protected $objectManager;
+
+	/**
 	 * @return null
 	 */
 	public function getCurrentUser() {
 		$currentAccount = $this->getCurrentAccount();
 		if ($currentAccount != NULL) {
-			return $currentAccount->getParty();
+
+			$partyRepository = $this->objectManager->get($this->partyRepositoryClassName);
+			return $partyRepository->findOneHavingAccount($currentAccount);
 		}
 		return NULL;
 	}

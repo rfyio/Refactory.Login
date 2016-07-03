@@ -25,15 +25,31 @@ class AccountViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper 
 	protected $securityContext;
 
 	/**
+	 * @var string
+	 * @Flow\Inject(setting="partyRepositoryClassName", package="Refactory.Login")
+	 */
+	protected $partyRepositoryClassName;
+
+	/**
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Object\ObjectManagerInterface
+	 */
+	protected $objectManager;
+
+	/**
 	 * @param string $propertyPath
 	 * @return string
 	 */
-	public function render($propertyPath = 'party.name') {
+	public function render($propertyPath = 'name') {
+
+		$partyRepository = $this->objectManager->get($this->partyRepositoryClassName);
+
 		$tokens = $this->securityContext->getAuthenticationTokens();
 
 		foreach ($tokens as $token) {
 			if ($token->isAuthenticated()) {
-				return (string)\TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($token->getAccount(), $propertyPath);
+				$person = $partyRepository->findOneHavingAccount($token->getAccount());
+				return (string)\TYPO3\Flow\Reflection\ObjectAccess::getPropertyPath($person, $propertyPath);
 			}
 		}
 
