@@ -12,11 +12,8 @@ language: php
 
 # list any PHP version you want to test against
 php:
-
-  # aliased to a recent 5.3.x version
-  - 5.3
-  # aliased to a recent 5.4.x version
-  - 5.4
+  - 5.6
+  - 7.0
 
 # optionally specify a list of environments, for example to test different RDBMS
 env:
@@ -30,7 +27,7 @@ before_script:
   - git clone git://github.com/typo3-ci/TYPO3-Travis-Integration.git build-environment
   - source build-environment/install-helper.sh
   - composer self-update
-  - composer create-project --dev --keep-vcs typo3/flow-base-distribution Flow 2.0.0
+  - composer create-project --dev --keep-vcs typo3/flow-base-distribution Flow 3.2.0
   # Symlink the package to the folder that its gonna go
   # [Replace Package key here]
   - mkdir -p Flow/Packages/Application && cd Flow/Packages/Application && ln -s ../../../Flow.Login && cd ../../
@@ -52,8 +49,6 @@ script:
   - pear channel-discover pear.phpmd.org
   - pear channel-discover pear.pdepend.org
   - pear install --alldeps typo3/PHPCS_FLOW3_Standard
-  # @todo dependency ImageMagick breaks doesn't know which one to install.
-  #- pear install --alldeps phpmd/PHP_PMD
   - pear install pdepend/PHP_Depend-beta
   - pear install phpunit/phpcpd
   - pear install phpunit/phploc
