@@ -102,7 +102,7 @@ class PasswordController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 						'resetPasswordToken' => $resetPasswordToken->getToken(),
 						 'recipient' => [
 							 'name' => $person->getName()->getFullName(),
-							 'email' => $person->getPrimaryElectronicAddress(),
+							 'email' => $person->getPrimaryElectronicAddress()->getIdentifier(),
 						 ],
 						'properties' => array('recipient' => $person)
 					)
