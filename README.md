@@ -1,4 +1,4 @@
-Refactory.Login [![Build Status](https://travis-ci.org/refactoryit/Flow.Login.png?branch=master)](https://travis-ci.org/refactoryit/Flow.Login)
+Refactory.Login [![Build Status](https://travis-ci.org/rfyio/Refactory.Login.svg?branch=master)](https://travis-ci.org/rfyio/Refactory.Login)
 ==================================================================================================================================================================
 
 This package is a lightweight authentication wrapper around a given package.
